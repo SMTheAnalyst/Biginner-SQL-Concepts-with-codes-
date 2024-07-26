@@ -51,6 +51,66 @@ select first_name,last_name,'Highly paid' as lable
 from employee_salary 
 where salary > 70000 order by first_name desc;
 
+-- String Function ( LENGTH,UPPER,LOWER,TRIM,SUBSTRING,REPLACE,LOCATE,CONCAT)
+
+select * from employee_demographics;
+select first_name, length(first_name) from employee_demographics; 
+select first_name, upper(last_name) from employee_demographics; 
+select first_name, lower(first_name) from employee_demographics; 
+select ltrim('       ILOVESQL   ');
+SELECT TRIM('sky'   );
+SELECT rtrim('       ILOVESQL   ');
+select first_name, last_name, left(first_name, 4) from employee_demographics;
+select first_name, last_name, right(last_name, 2) from employee_demographics;
+select first_name, last_name,right(last_name, 2), left(first_name, 4), substring(first_name,1,4), birth_date,substring(birth_date,7,1) as birth_month from employee_demographics;
+
+-- Case Statement
+
+select * from employee_salary;
+select * from employee_demographics;
+select first_name,last_name,age,
+case 
+	when age < 30 then 'YOUNG'
+    when age between 30 and 50 then 'OLD'
+    when age > 50 then 'NEED TO RETIRE'
+end AS Decision
+from employee_demographics;
+
+-- Case study if someone gets less then 50k give them 5% increase 
+-- if someone gets greater then 50k give them 5% increase 
+-- if someone works in finance dept then give them 10% bonus
+select 
+first_name , last_name, salary,
+case 
+	when salary < 50000 then salary + ( salary * .05)
+    when salary > 50000 then salary + ( salary * .07)
+ end as Revisedsalary,
+ case 
+	when dept_id = 6 then salary + ( salary * .10)
+end as Bonusforgreatwork
+from employee_salary;
+select * from parks_departments;
+
+-- Subquery ( Query into a query)
+
+select * from employee_demographics;
+select * from employee_salary;
+-- Subquery in where clause
+SELECT *
+FROM employee_demographics
+WHERE employee_id IN 
+	(SELECT employee_id FROM employee_salary WHERE dept_id = 1);
+    
+-- Subquery in select statement
+select first_name , last_name, salary as avg_sal,
+( select avg(salary) from employee_salary) 
+from employee_salary;
+
+-- Subquery in from statement
+select gender, avg(MIN_AGE) from 
+(select gender, max(age) as MAX_AGE, min(age) AS MIN_AGE, avg(age) as AVG_AGE, count(age) AS COUNT_AGE from employee_demographics group by GENDER)
+AS AGG_AGE
+group by gender;
 
 
 
